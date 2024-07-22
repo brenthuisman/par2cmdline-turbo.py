@@ -50,13 +50,12 @@ try:
     TURBO_PLATFORMTAG = TURBO_PLATFORMTAGS[TURBO_PLATFORM]
     TURBO_BINEXT = ".exe" if "win" in TURBO_PLATFORM else ""
 except KeyError:
-    print(
-        "The current or requested platform does not support par2cmdline-turbo.",
-        file=sys.stderr,
+    raise SystemExit(
+        "The current or requested platform does not support par2cmdline-turbo. "
+        + 'Please set "TURBO_PLATFORM" to one of '
+        + ", ".join(list(TURBO_PLATFORMTAGS.keys()))
+        + "."
     )
-    print('Please set "TURBO_PLATFORM" to one of ', file=sys.stderr)
-    print(", ".join(list(TURBO_PLATTAGS.keys())), file=sys.stderr)
-    sys.exit()
 
 
 class TurboComposer(build_ext):
@@ -95,9 +94,15 @@ class TurboComposer(build_ext):
                 os.system(f"7z e {destfile} -o{binaries_dir}")
         else:
             import lzma
-            with open(binaries_dir/"par2", 'wb') as fout, lzma.open(destfile, mode='rb') as fin:
+
+            with open(binaries_dir / "par2", "wb") as fout, lzma.open(
+                destfile, mode="rb"
+            ) as fin:
                 fout.write(fin.read())
-            os.chmod(binaries_dir/"par2", os.stat(binaries_dir/"par2").st_mode | stat.S_IEXEC)
+            os.chmod(
+                binaries_dir / "par2",
+                os.stat(binaries_dir / "par2").st_mode | stat.S_IEXEC,
+            )
 
         if "win" in TURBO_PLATFORM:
             new_binary_path = binaries_dir / "par2.exe"
@@ -126,7 +131,9 @@ class TurboCleaner(Command):
         import shutil
 
         here = Path(__file__).parent.resolve()
-        files_to_clean = "./build ./*.pyc ./*.egg-info ./*/__pycache__ ./__pycache__ ./*/binaries/*".split(" ")
+        files_to_clean = "./build ./*.pyc ./*.egg-info ./*/__pycache__ ./__pycache__ ./*/binaries/*".split(
+            " "
+        )
 
         for path_spec in files_to_clean:
             # Make paths absolute and relative to this path
@@ -171,8 +178,8 @@ class TurboWheel(bdist_wheel):
         # ensure that the binary is copied into the binaries/ folder and then
         # into the wheel.
         par2_binary = (
-            (Path(__file__).parent / "par2" / "binaries" / "par2").with_suffix(TURBO_BINEXT)
-        )
+            Path(__file__).parent / "par2" / "binaries" / "par2"
+        ).with_suffix(TURBO_BINEXT)
 
         # if the binary does not exist, then we need to build it, so invoke
         # the build_ext command again and proceed to build the binary

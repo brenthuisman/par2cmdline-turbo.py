@@ -5,20 +5,17 @@ from sys import platform as sysplatform
 
 FILE_EXT = ".exe" if sysplatform == "win32" else ""
 
+
 def par2_executable():
     """
     Returns the path to the par2cmdline-turbo executable.
     """
     return path.join(  # noqa: PTH118
-        path.dirname(__file__),  # noqa: PTH120
-        "binaries",
-        f"par2{FILE_EXT}"
+        path.dirname(__file__), "binaries", f"par2{FILE_EXT}"  # noqa: PTH120
     )
 
 
-MESSAGE = (
-    f"Running par2 via par2cmdline.py at {par2_executable()}"
-)
+MESSAGE = f"Running par2 via par2cmdline.py at {par2_executable()}"
 
 
 def __call():
