@@ -10,7 +10,7 @@ from setuptools.command.bdist_wheel import bdist_wheel
 from setuptools.command.build_ext import build_ext
 
 
-TURBO_BASE_URL = "https://github.com/animetosho/par2cmdline-turbo/releases/tag/v1.1.1/"
+TURBO_BASE_URL = "https://github.com/animetosho/par2cmdline-turbo/releases/tag/v1.2.0/"
 
 # Possible platform tags for wheels
 TURBO_PLATFORMTAGS = {
