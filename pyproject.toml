@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "par2cmdline-turbo"
-version = "1.2.0"
+dynamic = ["version"]
 authors = [
   { name = "Brent Huisman", email = "brent@huisman.eu.org" },
 ]
@@ -13,7 +13,7 @@ maintainers = [
 ]
 description = "Produce, verify and repair par2 files."
 readme = {file = "README.md", content-type = "text/markdown"}
-license = {file = "LICENSE"}
+license = "GPL-2.0-or-later"
 requires-python = ">=3.8"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -22,7 +22,6 @@ classifiers = [
     "Operating System :: MacOS",
     "Operating System :: POSIX :: Linux",
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
     "Topic :: Utilities",
 ]
 

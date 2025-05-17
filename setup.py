@@ -9,8 +9,7 @@ from setuptools import Command, Extension, setup
 from setuptools.command.bdist_wheel import bdist_wheel
 from setuptools.command.build_ext import build_ext
 
-
-TURBO_BASE_URL = "https://github.com/animetosho/par2cmdline-turbo/releases/tag/v1.2.0/"
+TURBO_VERSION = "1.3.0"
 
 # Possible platform tags for wheels
 TURBO_PLATFORMTAGS = {
@@ -18,10 +17,9 @@ TURBO_PLATFORMTAGS = {
     "linux-arm64": "manylinux_2_17_aarch64",
     "linux-armhf": "manylinux_2_17_armv7l",
     "macos-arm64": "macosx_11_0_arm64",
-    "macos-x64": "macosx_10_9_x86_64",
+    "macos-amd64": "macosx_10_9_x86_64",
     "win-arm64": "win_arm64",
     "win-x64": "win_amd64",
-    "win-x86": "win32",
 }
 
 
@@ -37,8 +35,8 @@ try:
             "win32": "win",
         }[sys.platform]
         THIS_ARCH = {
-            "x86_64": "x64" if THIS_OS == "macos" else "amd64",
-            "AMD64": "x64" if THIS_OS == "macos" else "amd64",
+            "x86_64": "amd64",
+            "AMD64": "amd64",
             "arm64": "arm64",
             "aarch64": "arm64",
             "x86": "x86",
@@ -77,8 +75,8 @@ class TurboComposer(build_ext):
         """
         print(f"Composing par2cmdline wheel for {TURBO_PLATFORM} ...")
 
-        turbourl = f"https://github.com/animetosho/par2cmdline-turbo/releases/download/v1.1.1/par2cmdline-turbo-v1.1.1-{TURBO_PLATFORM}."
-        turbourl += "7z" if "win" in TURBO_PLATFORM else "xz"
+        turbourl = f"https://github.com/animetosho/par2cmdline-turbo/releases/download/v{TURBO_VERSION}/par2cmdline-turbo-{TURBO_VERSION}-{TURBO_PLATFORM}.zip"
+        #turbourl += "7z" if "win" in TURBO_PLATFORM else "xz"
 
         destfile, _ = urlretrieve(turbourl)
         destfile = Path(destfile)
@@ -92,7 +90,7 @@ class TurboComposer(build_ext):
                 os.system(f"7z.exe e {destfile} -o{binaries_dir}")
             else:
                 os.system(f"7z e {destfile} -o{binaries_dir}")
-        else:
+        elif turbourl.endswith("7z"):
             import lzma
 
             with open(binaries_dir / "par2", "wb") as fout, lzma.open(
@@ -103,6 +101,15 @@ class TurboComposer(build_ext):
                 binaries_dir / "par2",
                 os.stat(binaries_dir / "par2").st_mode | stat.S_IEXEC,
             )
+        elif turbourl.endswith("zip"):
+            from zipfile import ZipFile
+
+            ZipFile(destfile).extractall(path=binaries_dir)
+            if not "win" in TURBO_PLATFORM:
+                os.chmod(
+                    binaries_dir / "par2",
+                    os.stat(binaries_dir / "par2").st_mode | stat.S_IEXEC,
+                )
 
         if "win" in TURBO_PLATFORM:
             new_binary_path = binaries_dir / "par2.exe"
@@ -189,9 +196,9 @@ class TurboWheel(bdist_wheel):
         # now that the binary exists, we have ensured its presence in the wheel
         super().run()
 
-
 # https://setuptools.pypa.io/en/latest/userguide/ext_modules.html
 setup(
+    version=f"{TURBO_VERSION}",
     ext_modules=[
         Extension(
             name="par2.build",
