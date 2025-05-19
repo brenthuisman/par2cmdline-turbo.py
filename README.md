@@ -22,15 +22,11 @@ Optionally, you can "cross-compile" the wheel for other platforms. It actually j
 
     $ TURBO_PLATFORM=linux-x64 pip wheel ./par2cmdline-turbo.py
 
-Supported platforms: linux-amd64, linux-arm64, linux-armhf, macos-arm64, macos-x64, win-arm64, win-x64, win-x86. You can use `generate-wheels.sh` to generate them all.
+Supported platforms: linux-amd64, linux-arm64, linux-armhf, macos-arm64, macos-amd64, win-arm64, win-amd64. You can use `generate-wheels.sh` to generate them all.
 
 ## Usage
 
 After install, `par2` should be in your path and usable as upstream `par2cmdline`. See [their usage documentation](https://github.com/Parchive/par2cmdline?tab=readme-ov-file#using-par2cmdline).
-
-## Dependencies
-
-At build-time, you need `7z[.exe]` in your `PATH` when you are building Windows wheels.
 
 ## Credits
 

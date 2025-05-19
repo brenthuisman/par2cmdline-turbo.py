@@ -19,7 +19,7 @@ TURBO_PLATFORMTAGS = {
     "macos-arm64": "macosx_11_0_arm64",
     "macos-amd64": "macosx_10_9_x86_64",
     "win-arm64": "win_arm64",
-    "win-x64": "win_amd64",
+    "win-amd64": "win_amd64",
 }
 
 
@@ -90,7 +90,7 @@ class TurboComposer(build_ext):
                 os.system(f"7z.exe e {destfile} -o{binaries_dir}")
             else:
                 os.system(f"7z e {destfile} -o{binaries_dir}")
-        elif turbourl.endswith("7z"):
+        elif turbourl.endswith("xz"):
             import lzma
 
             with open(binaries_dir / "par2", "wb") as fout, lzma.open(
@@ -111,12 +111,8 @@ class TurboComposer(build_ext):
                     os.stat(binaries_dir / "par2").st_mode | stat.S_IEXEC,
                 )
 
-        if "win" in TURBO_PLATFORM:
-            new_binary_path = binaries_dir / "par2.exe"
-            assert new_binary_path.exists()
-        else:
-            new_binary_path = binaries_dir / "par2"
-            assert new_binary_path.exists()
+        new_binary_path = binaries_dir / f"par2{TURBO_BINEXT}"
+        assert new_binary_path.exists()
 
 
 # https://github.com/pypa/setuptools/issues/1347: setuptools does not support
