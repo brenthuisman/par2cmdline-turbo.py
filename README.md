@@ -22,7 +22,7 @@ Optionally, you can "cross-compile" the wheel for other platforms. It actually j
 
     $ TURBO_PLATFORM=linux-x64 pip wheel ./par2cmdline-turbo.py
 
-Supported platforms: linux-amd64, linux-arm64, linux-armhf, macos-arm64, macos-amd64, win-arm64, win-amd64. You can use `generate-wheels.sh` to generate them all.
+Supported platforms: linux-amd64, linux-arm64, linux-armhf, macos-arm64, macos-amd64, win-arm64, win-x64. You can use `generate-wheels.sh` to generate them all.
 
 ## Usage
 

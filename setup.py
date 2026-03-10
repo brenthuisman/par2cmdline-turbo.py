@@ -9,7 +9,7 @@ from setuptools import Command, Extension, setup
 from setuptools.command.bdist_wheel import bdist_wheel
 from setuptools.command.build_ext import build_ext
 
-TURBO_VERSION = "1.3.0"
+TURBO_VERSION = "1.4.0"
 
 # Possible platform tags for wheels
 TURBO_PLATFORMTAGS = {
@@ -20,6 +20,7 @@ TURBO_PLATFORMTAGS = {
     "macos-amd64": "macosx_10_9_x86_64",
     "win-arm64": "win_arm64",
     "win-amd64": "win_amd64",
+    "win-x64": "win_amd64",
 }
 
 
@@ -40,6 +41,7 @@ try:
             "arm64": "arm64",
             "aarch64": "arm64",
             "x86": "x86",
+            "x64": "x64",
             "armv7l": "armhf",
         }[platform.machine()]
         TURBO_PLATFORM = f"{THIS_OS}-{THIS_ARCH}"
@@ -76,8 +78,7 @@ class TurboComposer(build_ext):
         print(f"Composing par2cmdline wheel for {TURBO_PLATFORM} ...")
 
         turbourl = f"https://github.com/animetosho/par2cmdline-turbo/releases/download/v{TURBO_VERSION}/par2cmdline-turbo-{TURBO_VERSION}-{TURBO_PLATFORM}.zip"
-        #turbourl += "7z" if "win" in TURBO_PLATFORM else "xz"
-
+        print(turbourl)
         destfile, _ = urlretrieve(turbourl)
         destfile = Path(destfile)
 
